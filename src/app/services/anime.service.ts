@@ -1,9 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { 
   collection, 
-  query, 
   getDocs, 
-  orderBy,
   addDoc,
   serverTimestamp
 } from 'firebase/firestore';
@@ -29,8 +27,14 @@ export class AnimeService {
       if (list.length === 0) {
         await this.seedInitialData();
       } else {
-        // Migration: Fix http links in existing data for Vercel
-        this.animeListSignal.set(list);
+        // Migration: Fix http links in existing data for Vercel poster stability
+        const cleanedList = list.map(anime => ({
+          ...anime,
+          posterUrl: anime.posterUrl?.startsWith('http://') 
+            ? anime.posterUrl.replace('http://', 'https://') 
+            : anime.posterUrl
+        }));
+        this.animeListSignal.set(cleanedList);
       }
     } catch (error) {
       console.error('Error loading catalog:', error);
@@ -44,7 +48,7 @@ export class AnimeService {
   async getEpisodes(animeId: string): Promise<Episode[]> {
     try {
       const epCol = collection(db, `anime/${animeId}/episodes`);
-      const epSnapshot = await getDocs(query(epCol, orderBy('number', 'asc')));
+      const epSnapshot = await getDocs(epCol);
       
       const episodes: Episode[] = [];
       for (const epDoc of epSnapshot.docs) {
@@ -58,7 +62,7 @@ export class AnimeService {
           if (fileUrl.startsWith('http://')) {
             fileUrl = fileUrl.replace('http://', 'https://');
           }
-          // Fix specific broken w3schools link if it exists
+          // Fix specific broken links
           if (fileUrl.includes('w3schools.com/html/mov_bbb.mp4')) {
             fileUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
           }
@@ -68,13 +72,14 @@ export class AnimeService {
         
         episodes.push({
           id: epDoc.id,
-          number: episodeData['number'],
-          titleUa: episodeData['titleUa'] || `Серія ${episodeData['number']}`,
+          number: episodeData['number'] || 1,
+          titleUa: episodeData['titleUa'] || `Серія ${episodeData['number'] || 1}`,
           durationSeconds: episodeData['durationSeconds'] || 1440,
           voices
         });
       }
-      return episodes;
+      // Sort in memory to avoid firestore index requirement
+      return episodes.sort((a, b) => a.number - b.number);
     } catch (error) {
       console.error('Error loading episodes:', error);
       return [];

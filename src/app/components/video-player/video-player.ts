@@ -12,10 +12,13 @@ import { AnimeService } from '../../services/anime.service';
       <div class="aspect-video bg-[#0a0a0a] relative group flex items-center justify-center border-b-4 border-primary">
         @if (currentVideoUrl()) {
           <video 
+            #videoPlayer
             class="w-full h-full z-10" 
             [src]="currentVideoUrl()" 
             controls 
             autoplay
+            playsinline
+            (error)="handleVideoError()"
           ></video>
         } @else {
           <img 
@@ -152,6 +155,11 @@ export class VideoPlayer {
     if (this.selectedVoice()) {
       this.currentVideoUrl.set(this.selectedVoice()!.fileUrl);
     }
+  }
+
+  handleVideoError() {
+    console.error('Video loading error at URL:', this.currentVideoUrl());
+    // Potentially fallback or show message
   }
 }
 
