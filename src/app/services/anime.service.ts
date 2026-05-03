@@ -77,7 +77,7 @@ export class AnimeService {
         year: 1999,
         episodesCount: 1100,
         status: 'ongoing',
-        genres: ['Пригоди', 'Сенен', 'Фентезі']
+        genres: ['Пригоди', 'Сьонен', 'Фентезі']
       },
       {
         titleUa: 'Бліч: Тисячолітня кривава війна',
@@ -87,7 +87,7 @@ export class AnimeService {
         year: 2022,
         episodesCount: 52,
         status: 'ongoing',
-        genres: ['Екшн', 'Надприродне']
+        genres: ['Екшн', 'Надприродне', 'Сьонен']
       },
       {
         titleUa: 'Магічна Битва',
@@ -97,7 +97,7 @@ export class AnimeService {
         year: 2020,
         episodesCount: 47,
         status: 'ongoing',
-        genres: ['Екшн', 'Фентезі']
+        genres: ['Екшн', 'Фентезі', 'Сьонен']
       }
     ];
 

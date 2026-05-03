@@ -33,7 +33,7 @@ export class App {
     return anime ? this.activityService.isInWatchlist(anime.id)() : false;
   });
   
-  categories = signal(['Всі', 'Екшн', 'Сьонен', 'Драма', 'Фентезі', 'Комедія', 'Жахи']);
+  categories = signal(['Всі', 'Екшн', 'Сьонен', 'Драма', 'Фентезі', 'Комедія', 'Пригоди', 'Надприродне']);
   activeCategory = signal('Всі');
 
   currentView = signal<'catalog' | 'player'>('catalog');
