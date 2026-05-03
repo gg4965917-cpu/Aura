@@ -85,8 +85,13 @@
               >
                 Дивитися зараз
               </button>
-              <button class="border border-white/20 bg-white/5 hover:bg-white/10 px-12 py-5 font-black uppercase text-xs tracking-widest transition-all transform hover:-translate-y-1">
-                + У список
+              <button 
+                (click)="activityService.toggleWatchlist(featured.id)"
+                [class.bg-primary]="isFeaturedInWatchlist()"
+                [class.text-black]="isFeaturedInWatchlist()"
+                [class.border-primary]="isFeaturedInWatchlist()"
+                class="border border-white/20 bg-white/5 hover:bg-white/10 px-12 py-5 font-black uppercase text-xs tracking-widest transition-all transform hover:-translate-y-1">
+                {{ isFeaturedInWatchlist() ? 'У списку' : '+ У список' }}
               </button>
             </div>
           </div>
