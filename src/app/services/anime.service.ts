@@ -97,7 +97,7 @@ export class AnimeService {
       {
         titleUa: 'Ван Піс',
         descriptionUa: 'Легендарна історія про пірата Монкі Д. Луффі та його команду, що шукають найбільший скарб у світі — Ван Піс.',
-        posterUrl: 'https://images.alphacoders.com/133/1331000.png',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1244/138851.jpg',
         rating: 9.8,
         year: 1999,
         episodesCount: 1100,
@@ -107,12 +107,32 @@ export class AnimeService {
       {
         titleUa: 'Бліч: Тисячолітня кривава війна',
         descriptionUa: 'Продовження історії Ічіґо Куросакі, який стикається з поверненням Квінсі — древнього ворога Женців Душ.',
-        posterUrl: 'https://images2.alphacoders.com/128/1286125.jpg',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg',
         rating: 9.5,
         year: 2022,
         episodesCount: 52,
         status: 'ongoing',
         genres: ['Екшн', 'Надприродне', 'Сьонен']
+      },
+      {
+        titleUa: 'Атака Титанів',
+        descriptionUa: 'Сторіччя тому людство було майже винищене гігантськими гуманоїдними істотами, яких називають Титанами.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
+        rating: 9.7,
+        year: 2013,
+        episodesCount: 88,
+        status: 'completed',
+        genres: ['Драма', 'Темне фентезі', 'Сьонен']
+      },
+      {
+        titleUa: 'Наруто: Ураганні хроніки',
+        descriptionUa: 'Минуло два з половиною роки з того часу, як Наруто Узумакі покинув Коноху для інтенсивних тренувань.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/5/17407.jpg',
+        rating: 9.4,
+        year: 2007,
+        episodesCount: 500,
+        status: 'completed',
+        genres: ['Бойові мистецтва', 'Сьонен', 'Екшн']
       }
     ];
 
@@ -123,38 +143,46 @@ export class AnimeService {
         createdAt: serverTimestamp()
       });
       
-      const isOnePiece = data.titleUa === 'Ван Піс';
-      const title = isOnePiece ? 'Я — Луффі! Людина, що стане Королем Піратів!' : 'Пробудження';
-      const directUrl = isOnePiece 
-        ? 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' 
-        : 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
-
       const epRef = await addDoc(collection(db, `anime/${docRef.id}/episodes`), {
         number: 1,
-        titleUa: title,
+        titleUa: 'Початок історії',
         durationSeconds: 1440,
         createdAt: serverTimestamp()
       });
 
-      // Source 1: Direct File
+      // Source 1: Direct File (Big Buck Bunny for testing)
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'Direct Link (High Quality)',
+        voiceActor: 'Direct 1080p (Sample)',
         voiceType: 'official',
-        fileUrl: directUrl
+        fileUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
       });
 
-      // Source 2: AniHub Embed Example
+      // Source 2: AniHub Embed (UA Dub)
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'AniHub (UA Dub)',
+        voiceActor: 'AniHub (UA)',
         voiceType: 'uk_dubbing',
-        embedUrl: 'https://anihub.top/embed/1' // Example
+        embedUrl: 'https://anihub.top/embed/1'
       });
 
-      // Source 3: BambooUA Embed Example
+      // Source 3: Anitube Embed
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'BambooUA',
+        voiceActor: 'Anitube UA',
+        voiceType: 'official',
+        embedUrl: 'https://anitube.in.ua/player/example'
+      });
+
+      // Source 4: UAchan Embed
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'UAchan (Voice)',
         voiceType: 'fan_dub',
-        embedUrl: 'https://bambooua.com/player/example' // Example
+        embedUrl: 'https://uachan.net/embed/example'
+      });
+
+      // Source 5: BambooUA Embed
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'BambooUA (Player)',
+        voiceType: 'fan_dub',
+        embedUrl: 'https://bambooua.com/player/example'
       });
 
       seededList.push({ id: docRef.id, ...data } as Anime);

@@ -71,17 +71,17 @@ service cloud.firestore {
     // Anime (Publicly Readable)
     match /anime/{animeId} {
       allow read: if true;
-      allow create: if isSignedIn();
+      allow create: if true; // Allow anonymous seeding for initial population
       allow update, delete: if false;
 
       match /episodes/{episodeId} {
         allow read: if true;
-        allow create: if isSignedIn();
+        allow create: if true;
         allow update, delete: if false;
 
         match /voices/{voiceId} {
           allow read: if true;
-          allow create: if isSignedIn();
+          allow create: if true;
           allow update, delete: if false;
         }
       }

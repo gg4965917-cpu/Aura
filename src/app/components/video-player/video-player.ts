@@ -170,11 +170,15 @@ export class VideoPlayer {
   }
 
   private updateMediaSource(voice: Voice) {
-    if (voice.fileUrl) {
-      this.currentVideoUrl.set(voice.fileUrl);
-    } else {
-      this.currentVideoUrl.set(null);
-    }
+    // Clear everything first to force reload
+    this.currentVideoUrl.set(null);
+    
+    // Small delay to ensure the DOM updates and previous player is destroyed
+    setTimeout(() => {
+      if (voice.fileUrl) {
+        this.currentVideoUrl.set(voice.fileUrl);
+      }
+    }, 0);
   }
 
   startPlayback() {
