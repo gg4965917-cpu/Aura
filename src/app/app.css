@@ -1,0 +1,71 @@
+:host {
+  display: block;
+}
+
+.bg-surface {
+  background-color: #050505;
+}
+
+.text-primary {
+  color: #d4ff00;
+}
+
+.bg-primary {
+  background-color: #d4ff00;
+}
+
+.bg-primary-dark {
+  background-color: #b8de00;
+}
+
+.border-primary {
+  border-color: #d4ff00;
+}
+
+.text-mask {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 30vw;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.02);
+  pointer-events: none;
+  z-index: 0;
+  user-select: none;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: -0.05em;
+}
+
+.brutalist-border {
+  border-left: 3px solid #d4ff00;
+  padding-left: 1.5rem;
+}
+
+/* Animations */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Scrollbar Hide */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

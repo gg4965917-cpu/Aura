@@ -46,6 +46,14 @@
   </nav>
 
   <main class="flex-1 pb-20 relative z-10">
+    @if (!userService.isLoaded()) {
+      <div class="fixed inset-0 z-[100] bg-surface flex items-center justify-center">
+        <div class="flex flex-col items-center gap-8">
+          <div class="w-16 h-16 border-4 border-white/5 border-t-primary animate-spin"></div>
+          <span class="text-[10px] font-black uppercase tracking-[0.4em] text-primary animate-pulse">Initializing Neural Link...</span>
+        </div>
+      </div>
+    }
     @if (currentView() === 'catalog') {
       <!-- Hero Section -->
       @if (featuredAnime(); as featured) {

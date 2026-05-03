@@ -142,6 +142,7 @@ export class VideoPlayer {
 
   selectVoice(voice: Voice) {
     this.selectedVoice.set(voice);
+    // If video is already playing, switch source immediately
     if (this.currentVideoUrl()) {
       this.currentVideoUrl.set(voice.fileUrl);
     }

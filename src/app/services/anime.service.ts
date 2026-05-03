@@ -29,6 +29,7 @@ export class AnimeService {
       if (list.length === 0) {
         await this.seedInitialData();
       } else {
+        // Migration: Fix http links in existing data for Vercel
         this.animeListSignal.set(list);
       }
     } catch (error) {
@@ -50,7 +51,20 @@ export class AnimeService {
         const episodeData = epDoc.data();
         const voicesCol = collection(db, `anime/${animeId}/episodes/${epDoc.id}/voices`);
         const voicesSnapshot = await getDocs(voicesCol);
-        const voices = voicesSnapshot.docs.map(vDoc => ({ id: vDoc.id, ...vDoc.data() } as Voice));
+        const voices = voicesSnapshot.docs.map(vDoc => {
+          const vData = vDoc.data();
+          // Ensure HTTPS for Vercel
+          let fileUrl = vData['fileUrl'] || '';
+          if (fileUrl.startsWith('http://')) {
+            fileUrl = fileUrl.replace('http://', 'https://');
+          }
+          // Fix specific broken w3schools link if it exists
+          if (fileUrl.includes('w3schools.com/html/mov_bbb.mp4')) {
+            fileUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
+          }
+          
+          return { id: vDoc.id, ...vData, fileUrl } as Voice;
+        });
         
         episodes.push({
           id: epDoc.id,
@@ -108,10 +122,13 @@ export class AnimeService {
         createdAt: serverTimestamp()
       });
       
-      // Seed some episodes for all anime
+      // Seed some episodes for all anime with working sample video
       const isOnePiece = data.titleUa === 'Ван Піс';
       const title = isOnePiece ? 'Я — Луффі! Людина, що стане Королем Піратів!' : 'Пробудження';
-      const url = isOnePiece ? 'https://www.w3schools.com/html/mov_bbb.mp4' : 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
+      // Use HTTPS only for Vercel compatibility
+      const url = isOnePiece 
+        ? 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' 
+        : 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
 
       const epRef = await addDoc(collection(db, `anime/${docRef.id}/episodes`), {
         number: 1,
