@@ -98,41 +98,61 @@ export class AnimeService {
         titleUa: 'Ван Піс',
         descriptionUa: 'Легендарна історія про пірата Монкі Д. Луффі та його команду, що шукають найбільший скарб у світі — Ван Піс.',
         posterUrl: 'https://cdn.myanimelist.net/images/anime/1244/138851.jpg',
-        rating: 9.8,
-        year: 1999,
-        episodesCount: 1100,
-        status: 'ongoing',
-        genres: ['Пригоди', 'Сьонен', 'Фентезі']
+        rating: 9.8, year: 1999, episodesCount: 1100, status: 'ongoing', genres: ['Пригоди', 'Сьонен', 'Фентезі']
       },
       {
-        titleUa: 'Бліч: Тисячолітня кривава війна',
-        descriptionUa: 'Продовження історії Ічіґо Куросакі, який стикається з поверненням Квінсі — древнього ворога Женців Душ.',
+        titleUa: 'Бліч: ТКВ',
+        descriptionUa: 'Продовження історії Ічіґо Куросакі, який стикається з поверненням Квінсі.',
         posterUrl: 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg',
-        rating: 9.5,
-        year: 2022,
-        episodesCount: 52,
-        status: 'ongoing',
-        genres: ['Екшн', 'Надприродне', 'Сьонен']
+        rating: 9.5, year: 2022, episodesCount: 52, status: 'ongoing', genres: ['Екшн', 'Надприродне']
       },
       {
         titleUa: 'Атака Титанів',
-        descriptionUa: 'Сторіччя тому людство було майже винищене гігантськими гуманоїдними істотами, яких називають Титанами.',
+        descriptionUa: 'Боротьба людства проти велетенських гуманоїдних істот — Титанів.',
         posterUrl: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-        rating: 9.7,
-        year: 2013,
-        episodesCount: 88,
-        status: 'completed',
-        genres: ['Драма', 'Темне фентезі', 'Сьонен']
+        rating: 9.7, year: 2013, episodesCount: 88, status: 'completed', genres: ['Драма', 'Темне фентезі']
       },
       {
-        titleUa: 'Наруто: Ураганні хроніки',
-        descriptionUa: 'Минуло два з половиною роки з того часу, як Наруто Узумакі покинув Коноху для інтенсивних тренувань.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/5/17407.jpg',
-        rating: 9.4,
-        year: 2007,
-        episodesCount: 500,
-        status: 'completed',
-        genres: ['Бойові мистецтва', 'Сьонен', 'Екшн']
+        titleUa: 'Solo Leveling',
+        descriptionUa: 'Найслабший мисливець стає найсильнішим у світі.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1015/138006.jpg',
+        rating: 9.6, year: 2024, episodesCount: 12, status: 'completed', genres: ['Екшн', 'Пригоди']
+      },
+      {
+        titleUa: 'Магічна Битва',
+        descriptionUa: 'Школяр стає маг-заклинателем, щоб боротися з прокляттями.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1171/109222.jpg',
+        rating: 9.3, year: 2020, episodesCount: 47, status: 'ongoing', genres: ['Екшн', 'Надприродне']
+      },
+      {
+        titleUa: 'Людина-Бензопила',
+        descriptionUa: 'Денджі укладає контракт з демоном і стає Людиною-Бензопилою.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1806/126216.jpg',
+        rating: 9.2, year: 2022, episodesCount: 12, status: 'completed', genres: ['Екшн', 'Гор']
+      },
+      {
+        titleUa: 'Сім’я Шпигуна',
+        descriptionUa: 'Шпигун повинен завести сім’ю для секретної місії.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1441/122795.jpg',
+        rating: 9.0, year: 2022, episodesCount: 37, status: 'ongoing', genres: ['Комедія', 'Екшн']
+      },
+      {
+        titleUa: 'Клинок, що знищує демонів',
+        descriptionUa: 'Танджіро стає мисливцем, щоб повернути людяність сестрі.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1286/99889.jpg',
+        rating: 9.4, year: 2019, episodesCount: 55, status: 'ongoing', genres: ['Екшн', 'Історичне']
+      },
+      {
+        titleUa: 'Зоряне Дитя',
+        descriptionUa: 'Темна сторона індустрії айдолів та шоу-бізнесу.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1812/134736.jpg',
+        rating: 9.1, year: 2023, episodesCount: 24, status: 'ongoing', genres: ['Драма', 'Музика']
+      },
+      {
+        titleUa: 'Фрірен',
+        descriptionUa: 'Подорож ельфійки після закінчення легендарної пригоди.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1015/138052.jpg',
+        rating: 9.9, year: 2023, episodesCount: 28, status: 'completed', genres: ['Пригоди', 'Фентезі']
       }
     ];
 
@@ -145,44 +165,44 @@ export class AnimeService {
       
       const epRef = await addDoc(collection(db, `anime/${docRef.id}/episodes`), {
         number: 1,
-        titleUa: 'Початок історії',
+        titleUa: 'Серія 1: Пробудження',
         durationSeconds: 1440,
         createdAt: serverTimestamp()
       });
 
-      // Source 1: Direct File (Big Buck Bunny for testing)
+      // Source 1: Anime4UA (Hikka)
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'Direct 1080p (Sample)',
-        voiceType: 'official',
-        fileUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+        voiceActor: 'Anime4UA (Hikka)',
+        voiceType: 'uk_dubbing',
+        embedUrl: 'https://anime4ua.com/embed/1'
       });
 
-      // Source 2: AniHub Embed (UA Dub)
+      // Source 2: AniHub
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'AniHub (UA)',
+        voiceActor: 'AniHub UA',
         voiceType: 'uk_dubbing',
         embedUrl: 'https://anihub.top/embed/1'
       });
 
-      // Source 3: Anitube Embed
+      // Source 3: Anitube
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'Anitube UA',
+        voiceActor: 'Anitube',
         voiceType: 'official',
         embedUrl: 'https://anitube.in.ua/player/example'
       });
 
-      // Source 4: UAchan Embed
+      // Source 4: UAchan
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'UAchan (Voice)',
+        voiceActor: 'UAchan Team',
         voiceType: 'fan_dub',
         embedUrl: 'https://uachan.net/embed/example'
       });
 
-      // Source 5: BambooUA Embed
+      // Source 5: BambooUA
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'BambooUA (Player)',
+        voiceActor: 'BambooUA Direct',
         voiceType: 'fan_dub',
-        embedUrl: 'https://bambooua.com/player/example'
+        fileUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
       });
 
       seededList.push({ id: docRef.id, ...data } as Anime);

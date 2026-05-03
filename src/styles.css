@@ -1,40 +1,67 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Outfit:wght@500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@400;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Outfit", var(--font-sans);
+  --font-display: "Outfit", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --color-primary: #d4ff00;
-  --color-primary-dark: #b8de00;
-  --color-surface: #050505;
-  --color-card: #121212;
-  --color-border-card: rgba(255, 255, 255, 0.1);
-
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
+  --color-primary: #ec4899;
+  --color-accent: #f59e0b;
+  --color-aura-bg: #0f070b;
+  --color-aura-card: #1a0e16;
+  --color-aura-accent: #ff71b7;
 }
 
 @layer base {
   body {
-    @apply bg-surface text-white font-sans antialiased overflow-x-hidden;
+    @apply bg-aura-bg text-white font-sans antialiased selection:bg-primary/30;
+    background-image: 
+      radial-gradient(at 0% 0%, rgba(236, 72, 153, 0.1) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.1) 0px, transparent 50%);
   }
 
-  h1, h2, h3, h4 {
-    @apply font-display tracking-tighter uppercase font-black;
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tight text-white;
   }
 }
 
-.text-mask {
-  @apply fixed top-[-50px] left-[-50px] text-[400px] font-black text-white/[0.03] pointer-events-none select-none z-0;
-  line-height: 0.8;
+.glass {
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+.glass-dark {
+  @apply bg-black/40 backdrop-blur-md border border-white/5;
 }
 
 .anime-card-gradient {
-  background: linear-gradient(to top, rgba(5, 5, 5, 0.9) 0%, rgba(5, 5, 5, 0) 100%);
+  background: linear-gradient(180deg, transparent 0%, rgba(26, 14, 22, 0.95) 100%);
 }
 
-.brutalist-border {
-  @apply border-l-4 border-primary pl-6;
+.aura-glow {
+  box-shadow: 0 0 30px rgba(236, 72, 153, 0.15);
 }
+
+.anime-input {
+  @apply bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-aura-bg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-white/10 rounded-full hover:bg-white/20 transition-colors;
+}
+
+@keyframes loading {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+
