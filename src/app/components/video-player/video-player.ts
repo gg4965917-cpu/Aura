@@ -108,8 +108,8 @@ export class VideoPlayer {
   
   protected episodes = signal<Episode[]>([]);
   protected activeEpisode = signal<Episode | null>(null);
-  protected currentEpisodeVoices = signal<any[]>([]);
-  protected selectedVoice = signal<any | null>(null);
+  protected currentEpisodeVoices = signal<Voice[]>([]);
+  protected selectedVoice = signal<Voice | null>(null);
   protected currentVideoUrl = signal<string | null>(null);
 
   constructor() {
@@ -140,7 +140,7 @@ export class VideoPlayer {
     }
   }
 
-  selectVoice(voice: any) {
+  selectVoice(voice: Voice) {
     this.selectedVoice.set(voice);
     if (this.currentVideoUrl()) {
       this.currentVideoUrl.set(voice.fileUrl);

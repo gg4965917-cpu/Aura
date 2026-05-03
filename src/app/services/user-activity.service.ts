@@ -1,15 +1,12 @@
-import { Injectable, signal, inject, computed } from '@angular/core';
+import { Injectable, signal, inject, computed, effect } from '@angular/core';
 import { 
-  Firestore, 
   collection, 
   doc, 
   setDoc, 
   deleteDoc, 
-  query, 
   onSnapshot,
   serverTimestamp,
-  getDocs,
-  where
+  Unsubscribe
 } from 'firebase/firestore';
 import { db } from '../firebase.config';
 import { UserService } from './user.service';
@@ -24,22 +21,37 @@ export interface WatchlistItem {
 })
 export class UserActivityService {
   private userService = inject(UserService);
+  private unsubscribe: Unsubscribe | null = null;
   
   watchlist = signal<WatchlistItem[]>([]);
   
   constructor() {
-    this.initWatchlistListener();
+    effect(() => {
+      const user = this.userService.currentUser();
+      if (user) {
+        this.startWatchlistListener(user.uid);
+      } else {
+        this.stopListener();
+        this.watchlist.set([]);
+      }
+    });
   }
 
-  private initWatchlistListener() {
-    // Listen for changes in user's watchlist
-    const user = this.userService.currentUser();
-    if (user) {
-      const q = collection(db, `users/${user.uid}/watchlist`);
-      onSnapshot(q, (snapshot) => {
-        const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as WatchlistItem));
-        this.watchlist.set(items);
-      });
+  private startWatchlistListener(userId: string) {
+    this.stopListener();
+    const q = collection(db, `users/${userId}/watchlist`);
+    this.unsubscribe = onSnapshot(q, (snapshot) => {
+      const items = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as WatchlistItem));
+      this.watchlist.set(items);
+    }, (error) => {
+      console.error('Watchlist listener error:', error);
+    });
+  }
+
+  private stopListener() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+      this.unsubscribe = null;
     }
   }
 

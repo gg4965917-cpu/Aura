@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, PLATFORM_ID, computed, effect } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, PLATFORM_ID, computed } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { AnimeService } from './services/anime.service';
@@ -38,6 +38,13 @@ export class App {
 
   currentView = signal<'catalog' | 'player'>('catalog');
   selectedAnime = signal<Anime | null>(null);
+
+  filteredAnimeList = computed(() => {
+    const list = this.animeList();
+    const category = this.activeCategory();
+    if (category === 'Всі') return list;
+    return list.filter(anime => anime.genres?.includes(category));
+  });
 
   setCategory(category: string) {
     this.activeCategory.set(category);

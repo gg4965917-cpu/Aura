@@ -108,19 +108,22 @@ export class AnimeService {
         createdAt: serverTimestamp()
       });
       
-      if (data.titleUa === 'Ван Піс') {
-        const epRef = await addDoc(collection(db, `anime/${docRef.id}/episodes`), {
-          number: 1,
-          titleUa: 'Я — Луффі! Людина, що стане Королем Піратів!',
-          durationSeconds: 1440,
-          createdAt: serverTimestamp()
-        });
-        await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-          voiceActor: 'FanVox UA',
-          voiceType: 'uk_dubbing',
-          fileUrl: 'https://www.w3schools.com/html/mov_bbb.mp4'
-        });
-      }
+      // Seed some episodes for all anime
+      const isOnePiece = data.titleUa === 'Ван Піс';
+      const title = isOnePiece ? 'Я — Луффі! Людина, що стане Королем Піратів!' : 'Пробудження';
+      const url = isOnePiece ? 'https://www.w3schools.com/html/mov_bbb.mp4' : 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
+
+      const epRef = await addDoc(collection(db, `anime/${docRef.id}/episodes`), {
+        number: 1,
+        titleUa: title,
+        durationSeconds: 1440,
+        createdAt: serverTimestamp()
+      });
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'FanVox UA',
+        voiceType: 'uk_dubbing',
+        fileUrl: url
+      });
 
       seededList.push({ id: docRef.id, ...data } as Anime);
     }
