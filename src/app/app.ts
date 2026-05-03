@@ -1,0 +1,51 @@
+import { ChangeDetectionStrategy, Component, inject, signal, PLATFORM_ID, computed } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { AnimeService } from './services/anime.service';
+import { UserService } from './services/user.service';
+import { AnimeCard } from './components/anime-card/anime-card';
+import { VideoPlayer } from './components/video-player/video-player';
+import { Anime } from './models/anime.model';
+
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-root',
+  imports: [RouterOutlet, AnimeCard, VideoPlayer],
+  templateUrl: './app.html',
+  styleUrl: './app.css',
+})
+export class App {
+  private platformId = inject(PLATFORM_ID);
+  private animeService = inject(AnimeService);
+  public userService = inject(UserService);
+  
+  animeList = this.animeService.getAnimeList();
+  
+  featuredAnime = computed(() => {
+    const list = this.animeList();
+    return list.length > 0 ? list[0] : null;
+  });
+  
+  categories = signal(['Всі', 'Екшн', 'Сьонен', 'Драма', 'Фентезі', 'Комедія', 'Жахи']);
+  activeCategory = signal('Всі');
+
+  currentView = signal<'catalog' | 'player'>('catalog');
+  selectedAnime = signal<Anime | null>(null);
+
+  setCategory(category: string) {
+    this.activeCategory.set(category);
+  }
+
+  showPlayer(anime: Anime) {
+    this.selectedAnime.set(anime);
+    this.currentView.set('player');
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  showCatalog() {
+    this.currentView.set('catalog');
+    this.selectedAnime.set(null);
+  }
+}

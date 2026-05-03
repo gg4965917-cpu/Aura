@@ -1,0 +1,104 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string", "format": "email" },
+        "photoURL": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Anime": {
+      "title": "Anime",
+      "description": "Anime title metadata",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "posterUrl": { "type": "string" },
+        "rating": { "type": "number" },
+        "year": { "type": "integer" },
+        "totalEpisodes": { "type": "integer" },
+        "status": { "type": "string", "enum": ["ongoing", "completed"] },
+        "genres": { "type": "array", "items": { "type": "string" } },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "posterUrl"]
+    },
+    "Episode": {
+      "title": "Episode",
+      "description": "Information about a specific episode",
+      "type": "object",
+      "properties": {
+        "episodeNumber": { "type": "integer" },
+        "title": { "type": "string" },
+        "airDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["episodeNumber"]
+    },
+    "Voice": {
+      "title": "Voice",
+      "description": "Dubbing or voice acting information with video URL",
+      "type": "object",
+      "properties": {
+        "language": { "type": "string" },
+        "voiceName": { "type": "string" },
+        "videoUrl": { "type": "string" }
+      },
+      "required": ["videoUrl", "voiceName"]
+    },
+    "WatchHistory": {
+      "title": "WatchHistory",
+      "description": "User's progress in an episode",
+      "type": "object",
+      "properties": {
+        "animeId": { "type": "string" },
+        "episodeId": { "type": "string" },
+        "progressSeconds": { "type": "integer" },
+        "lastWatchedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["animeId", "episodeId", "lastWatchedAt"]
+    },
+    "Watchlist": {
+      "title": "Watchlist",
+      "description": "Anime titles the user wants to watch",
+      "type": "object",
+      "properties": {
+        "animeId": { "type": "string" },
+        "addedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["animeId", "addedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "Stores user profiles"
+    },
+    "/anime/{animeId}": {
+      "schema": "Anime",
+      "description": "Stores anime titles metadata"
+    },
+    "/anime/{animeId}/episodes/{episodeId}": {
+      "schema": "Episode",
+      "description": "Stores episodes for a specific anime"
+    },
+    "/anime/{animeId}/episodes/{episodeId}/voices/{voiceId}": {
+      "schema": "Voice",
+      "description": "Stores voice acting options for an episode"
+    },
+    "/users/{userId}/history/{historyId}": {
+      "schema": "WatchHistory",
+      "description": "Stores user watch history"
+    },
+    "/users/{userId}/watchlist/{watchlistId}": {
+      "schema": "Watchlist",
+      "description": "Stores user watchlist"
+    }
+  }
+}
