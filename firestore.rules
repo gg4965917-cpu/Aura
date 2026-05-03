@@ -41,14 +41,14 @@ service cloud.firestore {
     }
 
     function isValidAnime(data) {
-      return data.keys().hasAll(['title', 'posterUrl']) &&
-             data.title is string && data.title.size() <= 200 &&
+      return data.keys().hasAll(['titleUa', 'posterUrl']) &&
+             data.titleUa is string && data.titleUa.size() <= 200 &&
              data.posterUrl is string && data.posterUrl.size() <= 500;
     }
 
     function isValidEpisode(data) {
-      return data.keys().hasAll(['episodeNumber']) &&
-             data.episodeNumber is int;
+      return data.keys().hasAll(['number']) &&
+             data.number is int;
     }
 
     function isValidWatchHistory(data) {
@@ -71,15 +71,18 @@ service cloud.firestore {
     // Anime (Publicly Readable)
     match /anime/{animeId} {
       allow read: if true;
-      allow write: if false; // Only admin (manual/backend) can write anime metadata
+      allow create: if isSignedIn();
+      allow update, delete: if false;
 
       match /episodes/{episodeId} {
         allow read: if true;
-        allow write: if false;
+        allow create: if isSignedIn();
+        allow update, delete: if false;
 
         match /voices/{voiceId} {
           allow read: if true;
-          allow write: if false;
+          allow create: if isSignedIn();
+          allow update, delete: if false;
         }
       }
     }
