@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, signal, PLATFORM_ID, computed } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { RouterOutlet } from '@angular/router';
 import { AnimeService } from './services/anime.service';
 import { UserService } from './services/user.service';
 import { UserActivityService } from './services/user-activity.service';
@@ -11,7 +10,7 @@ import { Anime } from './models/anime.model';
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-root',
-  imports: [RouterOutlet, AnimeCard, VideoPlayer],
+  imports: [AnimeCard, VideoPlayer],
   templateUrl: './app.html',
   styleUrl: './app.css',
 })

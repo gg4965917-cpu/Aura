@@ -1,5 +1,5 @@
 import { Component, input, signal, ChangeDetectionStrategy, inject, effect } from '@angular/core';
-import { Anime, Episode } from '../../models/anime.model';
+import { Anime, Episode, Voice } from '../../models/anime.model';
 import { AnimeService } from '../../services/anime.service';
 
 @Component({
