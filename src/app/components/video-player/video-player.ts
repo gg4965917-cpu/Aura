@@ -1,4 +1,5 @@
-import { Component, input, signal, ChangeDetectionStrategy, inject, effect } from '@angular/core';
+import { Component, input, signal, ChangeDetectionStrategy, inject, effect, computed } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { Anime, Episode, Voice } from '../../models/anime.model';
 import { AnimeService } from '../../services/anime.service';
 
@@ -10,7 +11,15 @@ import { AnimeService } from '../../services/anime.service';
     <div class="bg-black overflow-hidden border border-white/5 shadow-2xl">
       <!-- Video Stage -->
       <div class="aspect-video bg-[#0a0a0a] relative group flex items-center justify-center border-b-4 border-primary">
-        @if (currentVideoUrl()) {
+        @if (safeEmbedUrl()) {
+          <iframe 
+            [src]="safeEmbedUrl()!" 
+            class="w-full h-full border-0 absolute inset-0 z-10"
+            allow="autoplay; fullscreen; picture-in-picture; encrypted-media; gyroscope; accelerometer" 
+            allowfullscreen
+            sandbox="allow-forms allow-scripts allow-pointer-lock allow-same-origin allow-top-navigation"
+          ></iframe>
+        } @else if (currentVideoUrl()) {
           <video 
             #videoPlayer
             class="w-full h-full z-10" 
@@ -53,7 +62,7 @@ import { AnimeService } from '../../services/anime.service';
 
         <!-- Voice Selection -->
         <div class="w-full md:w-72 border-l border-white/5 pl-0 md:pl-12">
-          <h3 class="text-[10px] font-black uppercase text-white/30 mb-6 italic tracking-[0.3em]">Audio Feed</h3>
+          <h3 class="text-[10px] font-black uppercase text-white/30 mb-6 italic tracking-[0.3em]">Audio Feed / Source</h3>
           <div class="flex flex-col gap-3">
             @for (voice of currentEpisodeVoices(); track voice.id) {
               <button 
@@ -107,6 +116,8 @@ import { AnimeService } from '../../services/anime.service';
 })
 export class VideoPlayer {
   private animeService = inject(AnimeService);
+  private sanitizer = inject(DomSanitizer);
+  
   anime = input.required<Anime>();
   
   protected episodes = signal<Episode[]>([]);
@@ -114,6 +125,14 @@ export class VideoPlayer {
   protected currentEpisodeVoices = signal<Voice[]>([]);
   protected selectedVoice = signal<Voice | null>(null);
   protected currentVideoUrl = signal<string | null>(null);
+
+  protected safeEmbedUrl = computed<SafeResourceUrl | null>(() => {
+    const voice = this.selectedVoice();
+    if (voice && voice.embedUrl) {
+      return this.sanitizer.bypassSecurityTrustResourceUrl(voice.embedUrl);
+    }
+    return null;
+  });
 
   constructor() {
     effect(() => {
@@ -145,21 +164,28 @@ export class VideoPlayer {
 
   selectVoice(voice: Voice) {
     this.selectedVoice.set(voice);
-    // If video is already playing, switch source immediately
-    if (this.currentVideoUrl()) {
+    if (this.currentVideoUrl() || this.safeEmbedUrl()) {
+       this.updateMediaSource(voice);
+    }
+  }
+
+  private updateMediaSource(voice: Voice) {
+    if (voice.fileUrl) {
       this.currentVideoUrl.set(voice.fileUrl);
+    } else {
+      this.currentVideoUrl.set(null);
     }
   }
 
   startPlayback() {
-    if (this.selectedVoice()) {
-      this.currentVideoUrl.set(this.selectedVoice()!.fileUrl);
+    const voice = this.selectedVoice();
+    if (voice) {
+      this.updateMediaSource(voice);
     }
   }
 
   handleVideoError() {
     console.error('Video loading error at URL:', this.currentVideoUrl());
-    // Potentially fallback or show message
   }
 }
 

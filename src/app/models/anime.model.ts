@@ -22,7 +22,8 @@ export interface Episode {
 
 export interface Voice {
   id: string;
-  voiceType: 'uk_dubbing' | 'original_japanese';
+  voiceType: 'uk_dubbing' | 'original_japanese' | 'fan_dub' | 'official';
   voiceActor: string;
-  fileUrl: string;
+  fileUrl?: string;
+  embedUrl?: string; // Support AniHub, Anitube, etc.
 }

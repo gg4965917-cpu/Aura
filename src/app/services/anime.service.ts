@@ -59,15 +59,21 @@ export class AnimeService {
           const vData = vDoc.data();
           // Ensure HTTPS for Vercel
           let fileUrl = vData['fileUrl'] || '';
+          let embedUrl = vData['embedUrl'] || '';
+          
           if (fileUrl.startsWith('http://')) {
             fileUrl = fileUrl.replace('http://', 'https://');
           }
+          if (embedUrl.startsWith('http://')) {
+            embedUrl = embedUrl.replace('http://', 'https://');
+          }
+          
           // Fix specific broken links
           if (fileUrl.includes('w3schools.com/html/mov_bbb.mp4')) {
             fileUrl = 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
           }
           
-          return { id: vDoc.id, ...vData, fileUrl } as Voice;
+          return { id: vDoc.id, ...vData, fileUrl, embedUrl } as Voice;
         });
         
         episodes.push({
@@ -107,16 +113,6 @@ export class AnimeService {
         episodesCount: 52,
         status: 'ongoing',
         genres: ['Екшн', 'Надприродне', 'Сьонен']
-      },
-      {
-        titleUa: 'Магічна Битва',
-        descriptionUa: 'Юджі Ітадорі ковтає палець могутнього прокляття і стає частиною світу магів, що борються з небезпечними істотами.',
-        posterUrl: 'https://images6.alphacoders.com/131/1314619.jpg',
-        rating: 9.2,
-        year: 2020,
-        episodesCount: 47,
-        status: 'ongoing',
-        genres: ['Екшн', 'Фентезі', 'Сьонен']
       }
     ];
 
@@ -127,11 +123,9 @@ export class AnimeService {
         createdAt: serverTimestamp()
       });
       
-      // Seed some episodes for all anime with working sample video
       const isOnePiece = data.titleUa === 'Ван Піс';
       const title = isOnePiece ? 'Я — Луффі! Людина, що стане Королем Піратів!' : 'Пробудження';
-      // Use HTTPS only for Vercel compatibility
-      const url = isOnePiece 
+      const directUrl = isOnePiece 
         ? 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' 
         : 'https://storage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4';
 
@@ -141,10 +135,26 @@ export class AnimeService {
         durationSeconds: 1440,
         createdAt: serverTimestamp()
       });
+
+      // Source 1: Direct File
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'FanVox UA',
+        voiceActor: 'Direct Link (High Quality)',
+        voiceType: 'official',
+        fileUrl: directUrl
+      });
+
+      // Source 2: AniHub Embed Example
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'AniHub (UA Dub)',
         voiceType: 'uk_dubbing',
-        fileUrl: url
+        embedUrl: 'https://anihub.top/embed/1' // Example
+      });
+
+      // Source 3: BambooUA Embed Example
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'BambooUA',
+        voiceType: 'fan_dub',
+        embedUrl: 'https://bambooua.com/player/example' // Example
       });
 
       seededList.push({ id: docRef.id, ...data } as Anime);
