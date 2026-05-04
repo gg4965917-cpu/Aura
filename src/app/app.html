@@ -1,52 +1,58 @@
 <div class="min-h-screen flex flex-col bg-aura-bg relative overflow-x-hidden">
-  <!-- Decorative Aura Glows -->
-  <div class="fixed top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px] pointer-events-none"></div>
-  <div class="fixed bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-aura-accent/20 rounded-full blur-[120px] pointer-events-none"></div>
+  <!-- Interactive Aura Background -->
+  <div class="fixed top-[-20%] left-[-10%] w-[60%] h-[60%] bg-primary/10 rounded-full blur-[160px] pointer-events-none animate-pulse"></div>
+  <div class="fixed bottom-[-10%] right-[-20%] w-[50%] h-[50%] bg-aura-accent/10 rounded-full blur-[160px] pointer-events-none animate-pulse" style="animation-delay: 2s"></div>
 
-  <!-- Navigation bar -->
-  <nav class="sticky top-0 z-50 glass-dark py-6 px-6 md:px-12 flex items-center justify-between aura-glow">
-    <div class="flex items-center gap-10">
-      <button (click)="showCatalog()" class="flex items-center gap-4 cursor-pointer group" type="button">
-        <div class="relative w-12 h-12">
+  <!-- Navigation Rail / Bar -->
+  <nav class="sticky top-0 z-50 aura-glass-dark py-5 px-6 md:px-12 flex items-center justify-between border-b border-white/5">
+    <div class="flex items-center gap-12">
+      <button (click)="showCatalog()" class="flex items-center gap-5 cursor-pointer group active:scale-95 transition-all" type="button">
+        <div class="relative w-14 h-14">
           <img 
             src="https://ais-pre-gn73cehorbs2no6fja2ygh-30171238123.europe-west2.run.app/artifact/input_file_0.png"
-            class="w-full h-full rounded-2xl object-cover aura-glow transition-transform group-hover:scale-110 group-hover:rotate-3"
+            class="w-full h-full rounded-[1.5rem] object-cover shadow-[0_0_40px_rgba(236,72,153,0.3)] transition-all group-hover:scale-105 group-hover:rotate-6"
             alt="Aura Avatar"
           />
-          <div class="absolute -bottom-1 -right-1 w-4 h-4 bg-primary rounded-full border-2 border-aura-bg"></div>
+          <div class="absolute -top-1 -right-1 w-5 h-5 bg-primary rounded-full border-4 border-aura-bg animate-bounce"></div>
         </div>
-        <span class="text-3xl font-display font-black tracking-tighter uppercase italic select-none">
-          <span class="text-white">Au</span><span class="text-primary">ra</span>
-        </span>
+        <div class="flex flex-col">
+          <span class="text-3xl font-display font-black tracking-tighter uppercase italic select-none leading-none">
+            <span class="text-white">Au</span><span class="aura-gradient-text">ra</span>
+          </span>
+          <span class="text-[8px] font-black uppercase tracking-[0.5em] text-white/30">Premium Anime</span>
+        </div>
       </button>
       
-      <div class="hidden md:flex gap-10 text-[10px] font-black uppercase tracking-[0.3em] text-white/50">
-        <button type="button" (click)="showCatalog()" [class.text-primary]="currentView() === 'catalog'" [class.border-b-2]="currentView() === 'catalog'" [class.border-primary]="currentView() === 'catalog'" class="hover:text-primary transition-all pb-1 cursor-pointer">Тайтли</button>
-        <button type="button" class="hover:text-primary transition-all pb-1 cursor-pointer">Новинки</button>
-        <button type="button" class="hover:text-primary transition-all pb-1 cursor-pointer">База БД</button>
+      <div class="hidden lg:flex gap-10">
+        <button type="button" (click)="showCatalog()" [class.text-primary]="currentView() === 'catalog'" class="font-black uppercase text-[10px] tracking-[0.4em] hover:text-primary transition-all flex items-center gap-2">
+          @if (currentView() === 'catalog') {
+            <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+          }
+          Тайтли
+        </button>
+        <button type="button" class="font-black uppercase text-[10px] tracking-[0.4em] text-white/40 hover:text-primary transition-all">Календар</button>
+        <button type="button" class="font-black uppercase text-[10px] tracking-[0.4em] text-white/40 hover:text-primary transition-all">База</button>
       </div>
     </div>
 
-    <div class="flex items-center gap-6">
-      <div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-full px-6 py-2.5 gap-3 transition-all focus-within:border-primary focus-within:bg-white/10">
-        <span class="material-icons text-primary/50 text-base">search</span>
-        <input type="text" placeholder="ШУКАТИ МАГІЮ..." class="bg-transparent border-none outline-none text-[10px] font-bold uppercase tracking-widest w-48 placeholder:text-white/20" />
+    <div class="flex items-center gap-8">
+      <!-- Search Neural Link -->
+      <div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-2xl px-6 py-3 gap-4 transition-all focus-within:border-primary/50 focus-within:bg-white/10 group">
+        <span class="material-icons text-primary/40 text-lg group-focus-within:text-primary transition-colors">search</span>
+        <input type="text" placeholder="ШУКАТИ МАГІЮ..." class="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest w-56 placeholder:text-white/20" />
       </div>
 
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-6">
         @if (userService.currentUser(); as user) {
-          <div class="flex items-center gap-3">
-            <img [src]="user.photoURL" class="w-8 h-8 rounded-full border border-white/10" referrerpolicy="no-referrer" [alt]="user.displayName || 'User Avatar'">
-            <button (click)="userService.logout()" 
-              class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2.5 font-black text-[10px] tracking-widest uppercase transition-all">
-              ВИЙТИ
-            </button>
+          <div class="flex items-center gap-4">
+            <div class="flex flex-col items-end hidden sm:flex">
+              <span class="text-[10px] font-black uppercase tracking-widest text-white/80">{{ user.displayName || 'Користувач' }}</span>
+              <button (click)="userService.logout()" class="text-[8px] font-black uppercase tracking-[0.2em] text-primary hover:text-white transition-colors">Вийти</button>
+            </div>
+            <img [src]="user.photoURL" class="w-11 h-11 rounded-2xl ring-2 ring-primary/20 hover:ring-primary transition-all" alt="User">
           </div>
         } @else {
-          <button (click)="userService.login()" 
-            class="flex items-center gap-2 bg-primary hover:bg-primary-dark text-black px-6 py-2.5 font-black text-[10px] tracking-widest uppercase transition-all shadow-xl shadow-primary/20">
-            УВІЙТИ
-          </button>
+          <button (click)="userService.login()" class="aura-glass px-8 py-3 rounded-2xl font-black uppercase text-[10px] tracking-widest hover:bg-primary hover:text-white transition-all">Вхід</button>
         }
       </div>
     </div>
@@ -55,16 +61,35 @@
   <main class="flex-1 pb-20 relative z-10">
     @if (!userService.isLoaded()) {
       <div class="fixed inset-0 z-[100] bg-aura-bg flex items-center justify-center">
-        <div class="flex flex-col items-center gap-12">
-          <div class="relative">
-            <img src="https://ais-pre-gn73cehorbs2no6fja2ygh-30171238123.europe-west2.run.app/artifact/input_file_0.png" class="w-32 h-32 rounded-[2.5rem] aura-glow animate-pulse" alt="Aura Logo">
-            <div class="absolute inset-0 border-4 border-primary/20 border-t-primary rounded-[2.5rem] animate-spin"></div>
-          </div>
-          <div class="flex flex-col items-center gap-2">
-            <span class="text-xs font-display font-black uppercase tracking-[0.5em] text-primary animate-pulse">Aura Interface Booting...</span>
-            <div class="w-48 h-1 bg-white/5 rounded-full overflow-hidden">
-               <div class="h-full bg-primary animate-[loading_2s_infinite]"></div>
+        <!-- Neural Network Background -->
+        <div class="absolute inset-0 opacity-10 pointer-events-none">
+           <div class="absolute inset-0 bg-[radial-gradient(#ec4899_1px,transparent_1px)] [background-size:40px_40px]"></div>
+        </div>
+        
+        <div class="flex flex-col items-center gap-12 relative z-10">
+          <div class="relative group">
+            <div class="absolute -inset-10 bg-primary/20 rounded-full blur-[80px] animate-pulse"></div>
+            <img 
+              src="https://ais-pre-gn73cehorbs2no6fja2ygh-30171238123.europe-west2.run.app/artifact/input_file_0.png" 
+              class="w-40 h-40 rounded-[3rem] aura-glow shadow-[0_0_80px_rgba(236,72,153,0.5)] animate-float" 
+              alt="Aura Logo"
+            >
+            <div class="absolute inset-0 border-4 border-primary/20 border-t-primary rounded-[3rem] animate-spin p-2">
+               <div class="w-full h-full border border-primary/10 rounded-[2.5rem]"></div>
             </div>
+          </div>
+          
+          <div class="flex flex-col items-center gap-4">
+            <div class="flex items-center gap-4">
+               <div class="w-12 h-px bg-gradient-to-r from-transparent to-primary"></div>
+               <span class="text-sm font-display font-black uppercase tracking-[0.8em] text-primary animate-pulse aura-glow-text">SYNCHRONIZING AURA</span>
+               <div class="w-12 h-px bg-gradient-to-l from-transparent to-primary"></div>
+            </div>
+            <div class="w-64 h-1 bg-white/5 rounded-full overflow-hidden relative">
+               <div class="absolute inset-0 bg-primary/20"></div>
+               <div class="h-full bg-primary shadow-[0_0_15px_#ec4899] animate-[loading_2s_infinite]"></div>
+            </div>
+            <span class="text-[8px] font-mono text-white/20 uppercase tracking-widest mt-2">v3.0.0-neural-link.established</span>
           </div>
         </div>
       </div>

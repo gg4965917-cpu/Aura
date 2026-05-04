@@ -10,14 +10,15 @@ import { AnimeService } from '../../services/anime.service';
   imports: [MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex flex-col gap-8">
+    <div class="flex flex-col gap-10">
       <!-- Player Unit -->
-      <div class="glass-dark rounded-[2.5rem] overflow-hidden aura-glow border border-white/10 shadow-[0_20px_50px_rgba(236,72,153,0.2)]">
+      <div class="aura-glass-dark rounded-[3.5rem] overflow-hidden border border-white/10 shadow-[0_32px_80px_rgba(236,72,153,0.2)] relative">
         <!-- Video Stage -->
-        <div class="aspect-video bg-black relative group flex items-center justify-center">
+        <div class="aspect-video bg-[#050105] relative group flex items-center justify-center">
+          
           @if (safeEmbedUrl()) {
-            <div class="absolute inset-0 bg-[#0a0a0a] flex items-center justify-center z-0">
-               <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+            <div class="absolute inset-0 bg-black flex items-center justify-center z-0">
+               <div class="w-16 h-16 border-4 border-primary/10 border-t-primary rounded-full animate-spin"></div>
             </div>
             <iframe 
               [src]="safeEmbedUrl()!" 
@@ -37,98 +38,128 @@ import { AnimeService } from '../../services/anime.service';
               (error)="handleVideoError()"
             ></video>
           } @else {
-            <div class="absolute inset-0 flex flex-col items-center justify-center gap-6 p-12 text-center">
+            <!-- Placeholder State -->
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-10 p-12 text-center z-20">
               <div 
                 (click)="startPlayback()" 
-                class="w-28 h-28 bg-gradient-to-tr from-primary to-aura-accent flex items-center justify-center rounded-[2rem] aura-glow hover:scale-110 active:scale-95 transition-all cursor-pointer group/play"
+                class="w-32 h-32 bg-gradient-to-tr from-primary via-aura-accent to-pink-500 flex items-center justify-center rounded-[2.8rem] shadow-[0_0_60px_rgba(236,72,153,0.5)] hover:scale-110 active:scale-95 transition-all cursor-pointer group/play animate-float"
               >
-                <span class="material-icons text-5xl text-white group-hover/play:scale-110 transition-transform">play_arrow</span>
+                <span class="material-icons text-7xl text-white group-hover/play:scale-110 transition-transform">play_arrow</span>
               </div>
-              <div>
-                <h3 class="text-2xl font-display font-black uppercase tracking-widest text-white/90 mb-2 italic">Виберіть джерело озвучки</h3>
-                <p class="text-white/40 text-[10px] font-black uppercase tracking-[0.4em]">Підключено понад 8 українських баз даних</p>
+              <div class="space-y-4">
+                <h3 class="text-3xl md:text-4xl font-display font-black uppercase tracking-widest text-white aura-glow-text italic">AURA NEURAL LINK</h3>
+                <p class="text-white/30 text-[10px] font-black uppercase tracking-[0.6em]">ВИБЕРІТЬ ДЖЕРЕЛО ДЛЯ СИНХРОНІЗАЦІЇ</p>
               </div>
             </div>
+            <img [src]="anime().posterUrl" class="absolute inset-0 w-full h-full object-cover blur-3xl opacity-10 animate-pulse" alt="BG">
           }
-        </div>
 
-        <!-- Controls / Meta Info -->
-        <div class="p-6 md:p-12 flex flex-col lg:flex-row gap-12 bg-aura-card/50">
-          <div class="flex-1">
-            <div class="flex items-center gap-5 mb-8">
-               <span class="bg-primary/20 text-primary px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] border border-primary/20">Серія {{ activeEpisode()?.number || '??' }}</span>
-               <h2 class="text-4xl font-display font-[900] uppercase tracking-tighter italic">{{ activeEpisode()?.titleUa || '...' }}</h2>
-            </div>
-            
-            <!-- Episodes Browser -->
-            <div class="mb-4">
-              <h4 class="text-[10px] font-black uppercase text-white/30 mb-6 tracking-[0.3em]">Neural Section Select</h4>
-              <div class="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
-                @for (ep of episodes(); track ep.id) {
-                  <button 
-                    (click)="selectEpisode(ep)"
-                    [class.bg-primary]="activeEpisode()?.id === ep.id"
-                    [class.text-white]="activeEpisode()?.id === ep.id"
-                    [class.aura-glow]="activeEpisode()?.id === ep.id"
-                    [class.glass]="activeEpisode()?.id !== ep.id"
-                    class="flex-shrink-0 w-16 h-16 rounded-[1.25rem] flex items-center justify-center font-display font-[900] text-xl transition-all hover:scale-110 active:scale-90"
-                  >
-                    {{ ep.number }}
-                  </button>
-                }
-              </div>
+          <!-- Corner Tags -->
+          <div class="absolute top-8 left-8 z-30 pointer-events-none">
+            <div class="aura-glass px-5 py-2.5 rounded-2xl flex items-center gap-3">
+              <div class="w-2 h-2 bg-primary rounded-full animate-ping"></div>
+              <span class="text-[10px] font-black uppercase tracking-widest text-white/60">Aura Stream v3.0</span>
             </div>
           </div>
+        </div>
 
-          <!-- Voice / Source Selection -->
-          <div class="w-full lg:w-96 glass p-8 rounded-[2rem] border-white/10 aura-glow">
-            <h3 class="text-[10px] font-black uppercase text-primary mb-8 italic tracking-[0.4em] flex items-center gap-2">
-              <span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
-              Канали Озвучення
-            </h3>
-            <div class="grid grid-cols-1 gap-4">
-              @for (voice of currentEpisodeVoices(); track voice.id) {
-                <button 
-                  (click)="selectVoice(voice)"
-                  [class.bg-white/15]="selectedVoice()?.id === voice.id"
-                  [class.border-primary]="selectedVoice()?.id === voice.id"
-                  [class.text-primary]="selectedVoice()?.id === voice.id"
-                  class="group flex items-center justify-between p-5 rounded-2xl border border-white/5 hover:bg-white/10 hover:border-primary/50 transition-all text-left"
-                >
-                  <div class="flex flex-col">
-                    <span class="text-[9px] opacity-40 uppercase font-black tracking-widest mb-1">{{ voice.voiceType }}</span>
-                    <span class="font-black text-sm tracking-tight uppercase">{{ voice.voiceActor }}</span>
-                  </div>
-                  <div class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-primary/20 group-hover:text-primary transition-all">
-                    <span class="material-icons text-lg">play_arrow</span>
-                  </div>
-                </button>
-              } @empty {
-                <div class="py-12 text-center glass rounded-2xl border-dashed border-white/10">
-                  <span class="material-icons text-white/10 text-4xl mb-4">cloud_off</span>
-                  <p class="text-[10px] text-white/20 uppercase font-black tracking-widest">Джерела не знайдено</p>
+        <!-- Meta & Selectors -->
+        <div class="p-8 md:p-16 bg-gradient-to-b from-aura-card/40 to-aura-card/90 backdrop-blur-3xl border-t border-white/5">
+          <div class="flex flex-col xl:flex-row gap-20">
+            <div class="flex-1 space-y-12">
+              <div class="flex flex-col gap-6">
+                 <div class="flex items-center gap-6">
+                   <span class="aura-glass border-primary/30 text-primary px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-[0.3em]">SERIES • E{{ activeEpisode()?.number }}</span>
+                   <div class="h-px flex-1 bg-white/5"></div>
+                 </div>
+                 <h2 class="text-5xl md:text-7xl font-display font-black uppercase tracking-tighter italic aura-gradient-text drop-shadow-2xl">
+                   {{ activeEpisode()?.titleUa || 'Initialization...' }}
+                 </h2>
+              </div>
+              
+              <!-- Episode Grid -->
+              <div class="space-y-8">
+                <div class="flex items-center justify-between px-2">
+                  <h4 class="text-[10px] font-black uppercase text-white/20 tracking-[0.5em]">Episode Matrix</h4>
+                  <span class="text-[10px] font-mono text-primary/40">Status: Online</span>
                 </div>
-              }
+                <div class="flex gap-4 overflow-x-auto pb-8 scrollbar-hide">
+                  @for (ep of episodes(); track ep.id) {
+                    <button 
+                      (click)="selectEpisode(ep)"
+                      [class.bg-primary]="activeEpisode()?.id === ep.id"
+                      [class.text-white]="activeEpisode()?.id === ep.id"
+                      [class.shadow-[0_0_30px_rgba(236,72,153,0.4)]]="activeEpisode()?.id === ep.id"
+                      [class.aura-glass]="activeEpisode()?.id !== ep.id"
+                      class="flex-shrink-0 w-20 h-20 rounded-[1.8rem] flex items-center justify-center font-display font-black text-3xl transition-all hover:scale-110 active:scale-90 border-white/10"
+                    >
+                      {{ ep.number }}
+                    </button>
+                  }
+                </div>
+              </div>
+            </div>
+
+            <!-- Side Source Panel -->
+            <div class="w-full xl:w-[420px] space-y-10">
+              <div class="aura-glass p-12 rounded-[3.5rem] border-white/10 relative overflow-hidden">
+                <div class="absolute -top-4 -right-4 p-12 opacity-5">
+                   <span class="material-icons text-9xl">graphic_eq</span>
+                </div>
+                
+                <h3 class="text-[10px] font-black uppercase text-primary mb-12 tracking-[0.6em] flex items-center gap-5">
+                  <span class="w-2.5 h-2.5 bg-primary rounded-full animate-pulse shadow-[0_0_10px_#ec4899]"></span>
+                  AUDIO FEED
+                </h3>
+                
+                <div class="space-y-5">
+                  @for (voice of currentEpisodeVoices(); track voice.id) {
+                    <button 
+                      (click)="selectVoice(voice)"
+                      [class.bg-white/10]="selectedVoice()?.id === voice.id"
+                      [class.border-primary/40]="selectedVoice()?.id === voice.id"
+                      [class.text-primary]="selectedVoice()?.id === voice.id"
+                      class="group w-full flex items-center justify-between p-7 rounded-[2rem] border border-white/5 hover:bg-white/5 hover:border-primary/20 transition-all text-left aura-glow hover:aura-glow"
+                    >
+                      <div class="flex flex-col gap-2">
+                        <span class="text-[9px] opacity-30 uppercase font-black tracking-[0.2em]">{{ voice.voiceType }}</span>
+                        <span class="font-black text-base uppercase tracking-tight">{{ voice.voiceActor }}</span>
+                      </div>
+                      <div class="w-12 h-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-primary/20 group-hover:text-primary transition-all">
+                        <span class="material-icons text-2xl">{{ selectedVoice()?.id === voice.id ? 'graphic_eq' : 'link' }}</span>
+                      </div>
+                    </button>
+                  } @empty {
+                    <div class="py-20 text-center aura-glass rounded-[3rem] border-dashed border-white/10">
+                      <span class="material-icons text-white/5 text-6xl mb-6">sensors_off</span>
+                      <p class="text-[10px] text-white/20 uppercase font-black tracking-widest">No Sources Linked</p>
+                    </div>
+                  }
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Detail Info Overlay -->
-      <div class="flex flex-col md:flex-row gap-12 p-8 glass rounded-[2.5rem] opacity-80 hover:opacity-100 transition-opacity">
-        <div class="flex-1">
-          <h4 class="text-[10px] font-black uppercase tracking-[0.5em] mb-6 text-primary flex items-center gap-2">
-            <span class="material-icons text-sm">info</span>
-            СИНХРОНІЗАЦІЯ ДАНИХ
+      <!-- Info Footer -->
+      <div class="flex flex-col lg:flex-row gap-16 p-12 aura-glass rounded-[3.5rem] relative overflow-hidden group">
+        <div class="absolute -bottom-10 -right-10 text-[180px] font-black text-white/[0.02] italic pointer-events-none select-none transition-transform group-hover:scale-110">
+          INFO
+        </div>
+        <div class="flex-1 space-y-8 relative z-10">
+          <h4 class="text-[10px] font-black uppercase tracking-[0.6em] text-primary flex items-center gap-3">
+             <div class="w-6 h-px bg-primary/30"></div>
+             SYNAPSE DATA
           </h4>
-          <p class="text-sm leading-relaxed max-w-3xl font-medium text-white/70 italic">
+          <p class="text-lg md:text-xl leading-relaxed max-w-4xl font-medium text-white/60 italic border-l-4 border-primary/20 pl-10">
             "{{ anime().descriptionUa }}"
           </p>
         </div>
-        <div class="flex flex-wrap gap-3 items-start md:justify-end">
+        <div class="flex flex-wrap gap-4 items-start lg:justify-end xl:w-96 relative z-10">
            @for (genre of anime().genres; track genre) {
-             <span class="bg-white/5 border border-white/10 px-5 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-primary/10 hover:border-primary/50 transition-all cursor-default">
-               #{{ genre }}
+             <span class="aura-glass px-8 py-4 rounded-3xl text-[11px] font-black uppercase tracking-[0.2em] hover:bg-primary hover:text-white hover:border-primary transition-all cursor-default">
+               {{ genre }}
              </span>
            }
         </div>

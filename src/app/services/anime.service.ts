@@ -95,64 +95,52 @@ export class AnimeService {
   private async seedInitialData() {
     const initialAnime: Partial<Anime>[] = [
       {
-        titleUa: 'Ван Піс',
-        descriptionUa: 'Легендарна історія про пірата Монкі Д. Луффі та його команду, що шукають найбільший скарб у світі — Ван Піс.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/1244/138851.jpg',
-        rating: 9.8, year: 1999, episodesCount: 1100, status: 'ongoing', genres: ['Пригоди', 'Сьонен', 'Фентезі']
-      },
-      {
-        titleUa: 'Бліч: ТКВ',
-        descriptionUa: 'Продовження історії Ічіґо Куросакі, який стикається з поверненням Квінсі.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/1764/126627.jpg',
-        rating: 9.5, year: 2022, episodesCount: 52, status: 'ongoing', genres: ['Екшн', 'Надприродне']
-      },
-      {
-        titleUa: 'Атака Титанів',
-        descriptionUa: 'Боротьба людства проти велетенських гуманоїдних істот — Титанів.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
-        rating: 9.7, year: 2013, episodesCount: 88, status: 'completed', genres: ['Драма', 'Темне фентезі']
-      },
-      {
-        titleUa: 'Solo Leveling',
-        descriptionUa: 'Найслабший мисливець стає найсильнішим у світі.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/1015/138006.jpg',
-        rating: 9.6, year: 2024, episodesCount: 12, status: 'completed', genres: ['Екшн', 'Пригоди']
-      },
-      {
         titleUa: 'Магічна Битва',
-        descriptionUa: 'Школяр стає маг-заклинателем, щоб боротися з прокляттями.',
+        descriptionUa: 'У світі, де прокляття живляться людськими емоціями, старшокласник Юдзі Ітадорі поглинає могутній артефакт, щоб врятувати друзів, і стає частиною небезпечного світу магічних битв.',
         posterUrl: 'https://cdn.myanimelist.net/images/anime/1171/109222.jpg',
-        rating: 9.3, year: 2020, episodesCount: 47, status: 'ongoing', genres: ['Екшн', 'Надприродне']
+        rating: 9.3, year: 2020, episodesCount: 47, status: 'ongoing', genres: ['Екшн', 'Надприродне', 'Фентезі']
       },
       {
         titleUa: 'Людина-Бензопила',
-        descriptionUa: 'Денджі укладає контракт з демоном і стає Людиною-Бензопилою.',
+        descriptionUa: 'Денджі — бідний хлопець, який полює на демонів. Після зради він укладає контракт зі своїм демонічним псом Почітою і перетворюється на гібрида людини та бензопили.',
         posterUrl: 'https://cdn.myanimelist.net/images/anime/1806/126216.jpg',
-        rating: 9.2, year: 2022, episodesCount: 12, status: 'completed', genres: ['Екшн', 'Гор']
+        rating: 9.2, year: 2022, episodesCount: 12, status: 'completed', genres: ['Екшн', 'Демони', 'Горрор']
+      },
+      {
+        titleUa: 'Атака Титанів',
+        descriptionUa: 'Людство живе за трьома кільцями стін, щоб захиститися від людиноподібних гігантів. Ерен Єгер присягається знищити всіх титанів після руйнування його рідного міста.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/10/47347.jpg',
+        rating: 9.7, year: 2013, episodesCount: 88, status: 'completed', genres: ['Драма', 'Темне фентезі', 'Екшн']
+      },
+      {
+        titleUa: 'Підняття рівня поодинці',
+        descriptionUa: 'Найслабший мисливець людства отримує унікальну систему, яка дозволяє йому "піднімати рівень" без обмежень у небезпечному світі підземель.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1015/138006.jpg',
+        rating: 9.6, year: 2024, episodesCount: 12, status: 'completed', genres: ['Екшн', 'Пригоди', 'Фентезі']
+      },
+      {
+        titleUa: 'Дитина Ідола',
+        descriptionUa: 'Лікар Амемія Горо перевтілюється в одного з дітей легендарного ідола Хошіно Ай і занурюється у жорстокий та емоційний світ шоу-бізнесу.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1812/134736.jpg',
+        rating: 9.1, year: 2023, episodesCount: 24, status: 'ongoing', genres: ['Драма', 'Музика', 'Детектив']
+      },
+      {
+        titleUa: 'Фрірен: Після кінця подорожі',
+        descriptionUa: 'Подорож безсмертної ельфійки після завершення десятирічної пригоди, яка змінила світ. Роздуми про час, дружбу та шлях героїв.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1015/138052.jpg',
+        rating: 9.9, year: 2023, episodesCount: 28, status: 'completed', genres: ['Пригоди', 'Фентезі', 'Сейнен']
+      },
+      {
+        titleUa: 'Сага про Вінланд',
+        descriptionUa: 'Юний Торфінн прагне помститися вбивці свого батька на тлі кривавої боротьби вікінгів за владу в Англії XI століття.',
+        posterUrl: 'https://cdn.myanimelist.net/images/anime/1500/103005.jpg',
+        rating: 9.3, year: 2019, episodesCount: 48, status: 'completed', genres: ['Історичне', 'Драма', 'Сейнен']
       },
       {
         titleUa: 'Сім’я Шпигуна',
-        descriptionUa: 'Шпигун повинен завести сім’ю для секретної місії.',
+        descriptionUa: 'Шпигун отримує завдання створити фальшиву сім’ю, не знаючи, що його дружина — кілер, а донька — телепат. Комбо екшну та комедії.',
         posterUrl: 'https://cdn.myanimelist.net/images/anime/1441/122795.jpg',
-        rating: 9.0, year: 2022, episodesCount: 37, status: 'ongoing', genres: ['Комедія', 'Екшн']
-      },
-      {
-        titleUa: 'Клинок, що знищує демонів',
-        descriptionUa: 'Танджіро стає мисливцем, щоб повернути людяність сестрі.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/1286/99889.jpg',
-        rating: 9.4, year: 2019, episodesCount: 55, status: 'ongoing', genres: ['Екшн', 'Історичне']
-      },
-      {
-        titleUa: 'Зоряне Дитя',
-        descriptionUa: 'Темна сторона індустрії айдолів та шоу-бізнесу.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/1812/134736.jpg',
-        rating: 9.1, year: 2023, episodesCount: 24, status: 'ongoing', genres: ['Драма', 'Музика']
-      },
-      {
-        titleUa: 'Фрірен',
-        descriptionUa: 'Подорож ельфійки після закінчення легендарної пригоди.',
-        posterUrl: 'https://cdn.myanimelist.net/images/anime/1015/138052.jpg',
-        rating: 9.9, year: 2023, episodesCount: 28, status: 'completed', genres: ['Пригоди', 'Фентезі']
+        rating: 9.0, year: 2022, episodesCount: 37, status: 'ongoing', genres: ['Комедія', 'Екшн', 'Повсякденність']
       }
     ];
 
