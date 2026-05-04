@@ -37,16 +37,49 @@ export class App {
 
   currentView = signal<'catalog' | 'player'>('catalog');
   selectedAnime = signal<Anime | null>(null);
+  searchQuery = signal('');
+  mobileSearchActive = signal(false);
 
   filteredAnimeList = computed(() => {
     const list = this.animeList();
     const category = this.activeCategory();
-    if (category === 'Всі') return list;
-    return list.filter(anime => anime.genres?.includes(category));
+    const query = this.searchQuery().toLowerCase().trim();
+    
+    let filtered = list;
+    
+    if (category !== 'Всі') {
+      filtered = filtered.filter(anime => anime.genres?.includes(category));
+    }
+    
+    if (query) {
+      filtered = filtered.filter(anime => 
+        anime.titleUa.toLowerCase().includes(query) || 
+        anime.descriptionUa.toLowerCase().includes(query) ||
+        anime.genres.some(g => g.toLowerCase().includes(query))
+      );
+    }
+    
+    return filtered;
   });
+
+  setSearchQuery(event: Event) {
+    const target = event.target as HTMLInputElement;
+    this.searchQuery.set(target.value);
+  }
 
   setCategory(category: string) {
     this.activeCategory.set(category);
+  }
+
+  scrollToCatalog() {
+    if (isPlatformBrowser(this.platformId)) {
+      const element = document.getElementById('anime-catalog');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: window.innerHeight * 0.8, behavior: 'smooth' });
+      }
+    }
   }
 
   showPlayer(anime: Anime) {
@@ -60,5 +93,8 @@ export class App {
   showCatalog() {
     this.currentView.set('catalog');
     this.selectedAnime.set(null);
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 }

@@ -217,18 +217,20 @@ export class VideoPlayer {
 
   selectVoice(voice: Voice) {
     this.selectedVoice.set(voice);
-    if (this.currentVideoUrl() || this.safeEmbedUrl()) {
-       this.updateMediaSource(voice);
-    }
+    // Force refresh the player state
+    this.currentVideoUrl.set(null);
+    this.updateMediaSource(voice);
   }
 
   private updateMediaSource(voice: Voice) {
-    this.currentVideoUrl.set(null);
+    if (!this.selectedVoice()) return;
+    
+    // Use a slight delay to ensure the DOM elements are reset correctly
     setTimeout(() => {
       if (voice.fileUrl) {
         this.currentVideoUrl.set(voice.fileUrl);
       }
-    }, 0);
+    }, 50);
   }
 
   startPlayback() {

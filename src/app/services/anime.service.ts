@@ -169,12 +169,12 @@ export class AnimeService {
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
         voiceActor: 'AniHub UA',
         voiceType: 'uk_dubbing',
-        embedUrl: 'https://anihub.top/embed/1'
+        embedUrl: 'https://anihub.me/embed/1'
       });
 
       // Source 3: Anitube
       await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
-        voiceActor: 'Anitube',
+        voiceActor: 'Anitube Team',
         voiceType: 'official',
         embedUrl: 'https://anitube.in.ua/player/example'
       });
@@ -191,6 +191,20 @@ export class AnimeService {
         voiceActor: 'BambooUA Direct',
         voiceType: 'fan_dub',
         fileUrl: 'https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
+      });
+
+      // Source 6: FanVoxUA
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'FanVoxUA',
+        voiceType: 'uk_dubbing',
+        embedUrl: 'https://fanvoxua.org/player'
+      });
+
+      // Source 7: Lifeline
+      await addDoc(collection(db, `anime/${docRef.id}/episodes/${epRef.id}/voices`), {
+        voiceActor: 'Lifeline Premium',
+        voiceType: 'uk_dubbing',
+        embedUrl: 'https://lifeline.net.ua/embed'
       });
 
       seededList.push({ id: docRef.id, ...data } as Anime);

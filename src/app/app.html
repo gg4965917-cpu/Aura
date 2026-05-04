@@ -31,16 +31,27 @@
           Тайтли
         </button>
         <button type="button" class="font-black uppercase text-[10px] tracking-[0.4em] text-white/40 hover:text-primary transition-all">Календар</button>
-        <button type="button" class="font-black uppercase text-[10px] tracking-[0.4em] text-white/40 hover:text-primary transition-all">База</button>
+        <button (click)="scrollToCatalog()" type="button" class="font-black uppercase text-[10px] tracking-[0.4em] text-white/40 hover:text-primary transition-all">База</button>
       </div>
     </div>
 
     <div class="flex items-center gap-8">
-      <!-- Search Neural Link -->
+      <!-- Search Neural Link (Desktop) -->
       <div class="hidden md:flex items-center bg-white/5 border border-white/10 rounded-2xl px-6 py-3 gap-4 transition-all focus-within:border-primary/50 focus-within:bg-white/10 group">
         <span class="material-icons text-primary/40 text-lg group-focus-within:text-primary transition-colors">search</span>
-        <input type="text" placeholder="ШУКАТИ МАГІЮ..." class="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest w-56 placeholder:text-white/20" />
+        <input 
+          type="text" 
+          [value]="searchQuery()"
+          (input)="setSearchQuery($event)"
+          placeholder="ШУКАТИ МАГІЮ..." 
+          class="bg-transparent border-none outline-none text-[10px] font-black uppercase tracking-widest w-56 placeholder:text-white/20" 
+        />
       </div>
+
+      <!-- Mobile Search Toggle -->
+      <button (click)="mobileSearchActive.set(!mobileSearchActive())" class="md:hidden w-11 h-11 aura-glass flex items-center justify-center rounded-2xl text-primary">
+        <span class="material-icons">{{ mobileSearchActive() ? 'close' : 'search' }}</span>
+      </button>
 
       <div class="flex items-center gap-6">
         @if (userService.currentUser(); as user) {
@@ -57,6 +68,22 @@
       </div>
     </div>
   </nav>
+
+  <!-- Mobile Search Bar -->
+  @if (mobileSearchActive()) {
+    <div class="md:hidden sticky top-[92px] z-40 p-4 aura-glass-dark border-b border-white/5 animate-in slide-in-from-top duration-300">
+      <div class="flex items-center bg-white/5 border border-white/10 rounded-2xl px-6 py-4 gap-4">
+        <span class="material-icons text-primary/50 text-xl">search</span>
+        <input 
+          type="text" 
+          [value]="searchQuery()"
+          (input)="setSearchQuery($event)"
+          placeholder="ШУКАТИ МАГІЮ..." 
+          class="bg-transparent border-none outline-none text-sm font-black uppercase tracking-widest w-full placeholder:text-white/20" 
+        />
+      </div>
+    </div>
+  }
 
   <main class="flex-1 pb-20 relative z-10">
     @if (!userService.isLoaded()) {
@@ -151,10 +178,16 @@
       }
 
       <!-- Catalog Section -->
-      <section class="px-6 md:px-12 mt-20">
+      <section id="anime-catalog" class="px-6 md:px-12 mt-20">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-8">
           <div>
-            <h2 class="text-5xl font-black uppercase italic tracking-tighter mb-2">Останні оновлення</h2>
+            <h2 class="text-5xl font-black uppercase italic tracking-tighter mb-2">
+              @if (searchQuery()) {
+                Результати пошуку: "{{ searchQuery() }}"
+              } @else {
+                Останні оновлення
+              }
+            </h2>
             <div class="h-1 w-20 bg-primary"></div>
           </div>
           
